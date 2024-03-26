@@ -1,0 +1,16 @@
+---
+- name: Update and upgrade packages
+  become: true 
+  ansible.builtin.apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: Install Applications
+  become: true
+  ansible.builtin.apt:
+    name:
+      - vim
+      - git
+      - htop
+    state: present
+

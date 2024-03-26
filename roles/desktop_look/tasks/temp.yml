@@ -1,0 +1,27 @@
+---
+- name: Include a play for key bindings
+  include_tasks: keybindings.yml
+  loop:
+    - { id: "0", binding: "<Mod4>p", name: "Software Manager", action: "mintinstall" }
+    - { id: "1", binding: "<Mod4>t", name: "Terminal", action: "mate-terminal" }
+
+- name: Set numlock state to on
+  community.general.dconf:
+    key: "/org/mate/desktop/peripherals/keyboard/numlock-state"
+    value: "'on'"
+    state: present
+
+- name: Move panel to top of screen
+  community.general.dconf:
+    key: "/org/mate/panel/general/orientation"
+    value: "'top'"
+    state: present
+  notify:
+    - Restart MATE Panel
+
+handlers:
+  - name: Restart MATE Panel
+    ansible.builtin.service:
+      name: mate-panel
+      state: restarted
+

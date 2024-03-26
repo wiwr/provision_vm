@@ -1,0 +1,29 @@
+#- name: Include a play for key bindings
+#include_tasks: keybindings.yml
+#loop:
+#- { id: "0", binding: "<Mod4>p", name: "Software Manager", action: "mintinstall" }
+#- { id: "1", binding: "<Mod4>t", name: "Terminal", action: "mate-terminal" }
+
+- name: Set key bindings
+  community.general.dconf:
+    key: "/org/mate/desktop/keybindings/custom{{ item.id }}"
+    value: 
+      action: "{{ item.action }}"
+      binding: "{{ item.binding }}"
+      name: "{{ item.name }}"
+    state: present
+  loop:
+    - { id: "0", binding: "<Mod4>p", name: "Software Manager", action: "mintinstall" }
+    - { id: "1", binding: "<Mod4>t", name: "Terminal", action: "mate-terminal" }
+
+- name: Set numlock state to on
+  community.general.dconf:
+    key: "/org/mate/desktop/peripherals/keyboard/numlock-state"
+    value: "'on'"
+    state: present
+
+- name: Move panel to top of screen
+  community.general.dconf:
+    key: "/org/mate/panel/toplevels/bottom/orientation"
+    value: "'top'"
+    state: present
